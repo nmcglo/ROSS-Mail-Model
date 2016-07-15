@@ -17,13 +17,15 @@ SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/model_config.h PROPERTIE
 
 # All source files for the model
 SET(model_srcs
-	mail.c
+	mail_main.c
+	mail_driver.c
+	mail_map.c
 	mail.h
 	model_config.h
 )
 
-# Set the executable name here: model
-# You will be executing the ./model binary
+# Set the executable name here: mail
+# You will be executing the ./mail binary
 ADD_EXECUTABLE(mail ${model_srcs})
 
 TARGET_LINK_LIBRARIES(mail ROSS m)
