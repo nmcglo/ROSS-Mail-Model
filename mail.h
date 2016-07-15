@@ -1,3 +1,11 @@
+/*
+     mail.h
+     Mail System Simulator
+     7-15-2016
+     Neil McGlohon
+*/
+
+
 #ifndef _mail_h
 #define _mail_h
 
@@ -11,26 +19,22 @@
 
 // static int letters_per_mailbox = 10;
 
-typedef struct letter letter;
-typedef struct state state;
 // typedef struct mailbox_state mailbox_state;
 // typedef struct post_office_state post_office_state;
 
 
-struct letter
+typedef struct
 {
   tw_lpid sender;
   tw_lpid recipient;
-};
+} letter;
 
 
-struct state
+typedef struct
 {
-  // struct letter letter_outbox[];
-  // int num_letters_have;
   int num_letters_recvd;
   //TODO consider an inbox so that there could maybe be ad-hoc p2p messaging, interesting model
-};
+} state;
 
 // struct post_office_state
 // {

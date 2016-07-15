@@ -1,3 +1,11 @@
+/*
+     mail_driver.c
+     Mail System Simulator
+     7-15-2016
+     Neil McGlohon
+*/
+
+
 //The C driver file for a ROSS model
 //This file includes:
 // - an initialization function for each LP type
@@ -22,9 +30,10 @@ void mailbox_init (state *s, tw_lp *lp)
   s->num_letters_recvd = 0;
 
   int i;
-  for(i = 0; i < LET_PER_MAILBOX; i++)
+  for(i = 0; i < 1; i++)
   {
-    tw_event *e = tw_event_new(self,tw_rand_exponential(self, MEAN_MAILBOX_WAIT),lp);
+    // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
+    tw_event *e = tw_event_new(self,1,lp);
     letter *let = tw_event_data(e);
     let->sender = self;
     let->recipient = self;
@@ -37,13 +46,14 @@ void mailbox_event_handler(state *s, tw_bf *bf, letter *in_msg, tw_lp *lp)
 {
   int self = lp->gid;
 
-  // initialize the bit field //TODO what is this for?
-  // *(int *) bf = (int) 0;
+  // initialize the bit field
+  *(int *) bf = (int) 0;
 
   s->num_letters_recvd++;
 
   //schedule a new letter
-  tw_event *e = tw_event_new(self,tw_rand_exponential(self, MEAN_MAILBOX_WAIT),lp);
+  // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
+  tw_event *e = tw_event_new(self,1,lp);
   letter *let = tw_event_data(e);
   let->sender = self;
   let->recipient = self;

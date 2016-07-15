@@ -1,3 +1,11 @@
+/*
+     mail_main.c
+     Mail System Simulator
+     7-15-2016
+     Neil McGlohon
+*/
+
+
 //The C main file for a ROSS model
 //This file includes:
 // - definition of the LP types
