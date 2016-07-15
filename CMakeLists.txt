@@ -16,7 +16,7 @@ SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/model_config.h.in PROPER
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/model_config.h PROPERTIES GENERATED TRUE)
 
 # All source files for the model
-SET(model_srcs
+SET(mail_srcs
 	mail_main.c
 	mail_driver.c
 	mail_map.c
@@ -26,7 +26,7 @@ SET(model_srcs
 
 # Set the executable name here: mail
 # You will be executing the ./mail binary
-ADD_EXECUTABLE(mail ${model_srcs})
+ADD_EXECUTABLE(mail ${mail_srcs})
 
 TARGET_LINK_LIBRARIES(mail ROSS m)
 ## Alternatively, use this command with RIO

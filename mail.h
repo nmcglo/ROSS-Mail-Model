@@ -55,6 +55,22 @@ extern void mailbox_final(state *s, tw_lp *lp);
 
 extern tw_peid mail_map(tw_lpid gid);
 
+
+// static tw_stime lookahead = 1.0;
+// static unsigned int stagger = 0;
+// static unsigned int offset_lpid = 0;
+// static tw_stime mult = 1.4;
+// static int g_phold_start_events = 1;
+// static int optimistic_memory = 100;
+// static unsigned int ttl_lps = 0;
+static unsigned int nlp_per_pe = 1;
+
+// static tw_stime mean = 1.0;
+
+// static char run_id[1024] = "undefined";
+
+
+
 // extern void post_office_init(state *s, tw_lp *lp);
 // extern void post_office_event_handler(state *s, tw_bf *bf, message *in_msg, tw_lp *lp);
 // extern void post_office_RC_event_handler(state *s, tw_bf *bf, message *in_msg, tw_lp *lp);

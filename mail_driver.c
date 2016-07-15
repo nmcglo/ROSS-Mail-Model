@@ -14,9 +14,6 @@
 // - a finalization function for each LP type
 
 //Includes
-#include <stdio.h>
-
-#include "ross.h"
 #include "mail.h"
 
 
@@ -30,10 +27,12 @@ void mailbox_init (state *s, tw_lp *lp)
   s->num_letters_recvd = 0;
 
   int i;
-  for(i = 0; i < 1; i++)
+  for(i = 0; i < LET_PER_MAILBOX; i++)
   {
     // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
-    tw_event *e = tw_event_new(self,1,lp);
+    tw_stime ts = 1;
+    // tw_stime ts = tw_rand_exponential(lp->rng, mean) + lookahead + (tw_stime)(lp->gid % (unsigned int)g_tw_ts_end);
+    tw_event *e = tw_event_new(self,ts,lp);
     letter *let = tw_event_data(e);
     let->sender = self;
     let->recipient = self;
@@ -45,18 +44,31 @@ void mailbox_init (state *s, tw_lp *lp)
 void mailbox_event_handler(state *s, tw_bf *bf, letter *in_msg, tw_lp *lp)
 {
   int self = lp->gid;
+  // tw_lpid dest = self;
+  tw_lpid dest;
 
-  // initialize the bit field
-  *(int *) bf = (int) 0;
+  unsigned int ttl_lps = tw_nnodes() * g_tw_npe * nlp_per_pe;
+  dest = tw_rand_integer(lp->rng, 0, ttl_lps - 1);
+
+     if(dest >= (g_tw_nlp * tw_nnodes()))
+     {
+          printf("Attempted Destination: %llu\n", dest);
+          tw_error(TW_LOC, "bad dest");
+     }
+
+  // // initialize the bit field
+  // *(int *) bf = (int) 0;
 
   s->num_letters_recvd++;
 
   //schedule a new letter
   // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
-  tw_event *e = tw_event_new(self,1,lp);
+  tw_stime ts = 1;
+  // tw_stime ts = tw_rand_exponential(lp->rng, mean) + lookahead + (tw_stime)(lp->gid % (unsigned int)g_tw_ts_end);
+  tw_event *e = tw_event_new(dest,ts,lp);
   letter *let = tw_event_data(e);
   let->sender = self;
-  let->recipient = self;
+  let->recipient = dest;
   tw_event_send(e);
 }
 
