@@ -25,6 +25,7 @@ tw_lptype model_lps[] = {
     (pre_run_f) NULL,
     (event_f) mailbox_event_handler,
     (revent_f) mailbox_RC_event_handler,
+    (commit_f) mailbox_commit,
     (final_f) mailbox_final,
     (map_f) mail_map,
     sizeof(state)

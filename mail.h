@@ -52,6 +52,7 @@ extern void mailbox_init(state *s, tw_lp *lp);
 extern void mailbox_event_handler(state *s, tw_bf *bf, letter *in_msg, tw_lp *lp);
 extern void mailbox_RC_event_handler(state *s, tw_bf *bf, letter *in_msg, tw_lp *lp);
 extern void mailbox_final(state *s, tw_lp *lp);
+extern void mailbox_commit(state *s, tw_bf *bf, letter *m, tw_lp *lp);
 
 extern tw_peid mail_map(tw_lpid gid);
 

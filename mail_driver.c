@@ -83,6 +83,10 @@ void mailbox_final(state *s, tw_lp *lp)
   printf("%d received %d messages\n", self, s->num_letters_recvd);
 }
 
+void mailbox_commit(state * s, tw_bf * bf, letter * m, tw_lp * lp)
+{
+}
+
 //-------------Post office stuff-------------
 //
 // void post_office_init (state *s, tw_lp *lp)
