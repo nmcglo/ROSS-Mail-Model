@@ -25,7 +25,7 @@ tw_lptype model_lps[] = {
     (pre_run_f) NULL,
     (event_f) mailbox_event_handler,
     (revent_f) mailbox_RC_event_handler,
-    (commit_f) mailbox_commit,
+    (commit_f) NULL,
     (final_f) mailbox_final,
     (map_f) mail_map,
     sizeof(state)
@@ -69,7 +69,7 @@ int mail_main(int argc, char** argv, char **env)
 	// get rid of error if compiled w/ MEMORY queues
 	// g_tw_memory_nqueues=1;
 	// set a min lookahead of 1.0
-	// lookahead = 1.0;
+	lookahead = 1.0;
 
 	tw_opt_add(model_opts);
 	tw_init(&argc, &argv);
@@ -87,7 +87,7 @@ int mail_main(int argc, char** argv, char **env)
 	// g_tw_events_per_pe = (mult * nlp_per_pe * g_phold_start_events) +
 	// 			optimistic_memory;
 	// //g_tw_rng_default = TW_FALSE;
-	// g_tw_lookahead = lookahead;
+	g_tw_lookahead = lookahead;
 
 	//set up LPs within ROSS
 	tw_define_lps(nlp_per_pe, sizeof(letter));

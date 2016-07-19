@@ -57,7 +57,7 @@ extern void mailbox_commit(state *s, tw_bf *bf, letter *m, tw_lp *lp);
 extern tw_peid mail_map(tw_lpid gid);
 
 
-// static tw_stime lookahead = 1.0;
+static tw_stime lookahead = 1.0;
 // static unsigned int stagger = 0;
 // static unsigned int offset_lpid = 0;
 // static tw_stime mult = 1.4;
