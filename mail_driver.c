@@ -35,7 +35,7 @@ void mailbox_init (mailbox_state *s, tw_lp *lp)
           tw_event *e = tw_event_new(self,ts,lp);
           letter *let = tw_event_data(e);
           let->sender = self;
-          let->recipient = self;
+          let->final_dest = self;
           tw_event_send(e);
      }
 }
@@ -53,13 +53,7 @@ void mailbox_event_handler(mailbox_state *s, tw_bf *bf, letter *in_msg, tw_lp *l
 
      //Next destination from a mailbox is its assigned post office
      tw_lpid assigned_post_office = get_assigned_post_office_LID(lp->id);
-     tw_lpid next_dest = get_post_office_GID(assigned_post_office);
-
-     if(dest >= (g_tw_nlp * tw_nnodes()))
-     {
-          printf("Attempted Destination: %llu\n", dest);
-          tw_error(TW_LOC, "bad dest");
-     }
+     next_dest = get_post_office_GID(assigned_post_office);
 
      // // initialize the bit field
      // *(int *) bf = (int) 0;
@@ -86,7 +80,7 @@ void mailbox_RC_event_handler(mailbox_state *s, tw_bf *bf, letter *in_msg, tw_lp
 
 void mailbox_final(mailbox_state *s, tw_lp *lp)
 {
-     int self = lp->gid;
+     int self = lp->gid
      printf("%d received %d messages\n", self, s->num_letters_recvd);
 }
 

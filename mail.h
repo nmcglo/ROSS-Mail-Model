@@ -14,13 +14,10 @@
 #define MEAN_MAILBOX_WAIT 10.0
 // #define MEAN_PO_PROCESS_WAIT 45.0
 
-#define LET_PER_MAILBOX 10
+#define LET_PER_MAILBOX 1
 
-// static int letters_per_mailbox = 10;
 
-// typedef struct mailbox_state mailbox_state;
-// typedef struct post_office_state post_office_state;
-
+//STRUCTS ------------------------------
 
 typedef struct
 {
@@ -42,17 +39,24 @@ typedef struct
   //TODO consider an inbox so that there could maybe be ad-hoc p2p messaging, interesting model
 } post_office_state;
 
-// struct post_office_state
-// {
-//   struct letter po_letter_storage[];
-//   int num_letters_processed;
-// }
-
-extern unsigned int setting_1;
 
 
-extern tw_lptype model_lps[];
+//MAPPING -----------------------------
+enum lpTypeVals
+{
+  MAILBOX = 0,
+  POSTOFFICE = 1
+};
 
+
+extern tw_peid mail_map(tw_lpid gid);
+extern int get_mailbox_GID(tw_lpid lpid);
+extern int get_post_office_GID(tw_lpid lpid);
+extern int get_assigned_post_office_LID(tw_lpid lpid);
+
+
+
+//DRIVER STUFF -----------------------------
 
 extern void mailbox_init(mailbox_state *s, tw_lp *lp);
 extern void mailbox_event_handler(mailbox_state *s, tw_bf *bf, letter *in_msg, tw_lp *lp);
@@ -69,10 +73,14 @@ extern void post_office_commit(post_office_state *s, tw_bf *bf, letter *m, tw_lp
 
 
 
-extern tw_peid mail_map(tw_lpid gid);
-extern int get_mailbox_GID(tw_lpid lpid);
-extern int get_post_office_GID(tw_lpid lpid);
-extern int get_assigned_post_office_LID(tw_lpid lpid);
+
+//MAIN STUFF-----------------------------
+
+
+extern unsigned int setting_1;
+
+
+extern tw_lptype model_lps[];
 
 
 static tw_stime lookahead = 10.0;
