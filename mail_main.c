@@ -16,7 +16,7 @@ tw_lptype model_lps[] =
 {
      {
           (init_f) mailbox_init,
-          (pre_run_f) NULL,
+          (pre_run_f) mailbox_prerun,
           (event_f) mailbox_event_handler,
           (revent_f) mailbox_RC_event_handler,
           (commit_f) NULL,
@@ -26,7 +26,7 @@ tw_lptype model_lps[] =
      },
      {
           (init_f) post_office_init,
-          (pre_run_f) NULL,
+          (pre_run_f) post_office_prerun,
           (event_f) post_office_event_handler,
           (revent_f) post_office_RC_event_handler,
           (commit_f) NULL,
@@ -55,6 +55,18 @@ const tw_optdef model_opts[] = {
      TWOPT_END()
 };
 
+
+void init_mail()
+{
+     g_tw_lp_types = model_lps;
+     g_tw_lp_typemap = lpTypeMapper;
+
+     // nlp_per_pe = total_mailboxes + total_post_offices;
+}
+
+
+
+
 //for doxygen
 #define mail_main main
 int mail_main(int argc, char** argv, char **env)
@@ -68,6 +80,8 @@ int mail_main(int argc, char** argv, char **env)
 
      tw_opt_add(model_opts);
      tw_init(&argc, &argv);
+
+     init_mail();
 
      // if( lookahead > 1.0 )
      //   tw_error(TW_LOC, "Lookahead > 1.0 .. needs to be less\n");
@@ -87,7 +101,6 @@ int mail_main(int argc, char** argv, char **env)
      //set up LPs within ROSS
      tw_define_lps(nlp_per_pe, sizeof(letter));
 
-     g_tw_lp_types = model_lps;
      tw_lp_setup_types();
 
 
