@@ -89,17 +89,18 @@ extern unsigned int setting_1;
 extern tw_lptype model_lps[];
 
 
-static tw_stime lookahead = 10.0;
-// static unsigned int stagger = 0;
-// static unsigned int offset_lpid = 0;
-// static tw_stime mult = 1.4;
-// static int g_phold_start_events = 1;
-// static int optimistic_memory = 100;
-// static unsigned int ttl_lps = 0;
-static unsigned int nlp_per_pe = 1;
+// tw_stime lookahead = 10.0;
+// unsigned int ttl_lps = 0;
+// unsigned int offset_lpid = 0;
+// unsigned int nlp_per_pe = 1;
+// unsigned int custom_LPs_per_pe = 1;
 
-static int total_mailboxes = 10;
-static int total_post_offices = 3;
+tw_stime lookahead;
+unsigned int nlp_per_pe;
+unsigned int custom_LPs_per_pe;
+
+int total_mailboxes;
+int total_post_offices;
 
 // static tw_stime mean = 1.0;
 

@@ -25,12 +25,15 @@ int get_assigned_post_office_GID(int lpid)
 
 tw_lpid lpTypeMapper(tw_lpid gid)
 {
+     // printf("%llu\n",gid);
      if (gid < total_mailboxes)
      {
+          // printf("%llu < %i\n",gid,total_mailboxes);
           return MAILBOX;
      }
      else
      {
+          // printf("%llu >= %i\n",gid,total_mailboxes);
           return POSTOFFICE;
      }
 

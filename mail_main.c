@@ -8,8 +8,6 @@ Neil McGlohon
 //includes
 #include "mail.h"
 
-#define MB_LP 1
-#define PO_LP 2
 
 // Define LP types
 tw_lptype model_lps[] =
@@ -39,12 +37,15 @@ tw_lptype model_lps[] =
 
 
 //Define command line arguments default values
-unsigned int setting_1 = 0;
+int total_mailboxes= 0;
+int total_post_offices = 0;
 
 //add your command line opts
 const tw_optdef model_opts[] = {
      TWOPT_GROUP("Mail Model"),
-     TWOPT_UINT("nlp", nlp_per_pe, "number of LPs per processor"),
+     TWOPT_UINT("mailboxes", total_mailboxes, "Number of mailboxes in simulation"),
+     TWOPT_UINT("postoffices", total_post_offices, "Number of post offices in simulation"),
+     // TWOPT_UINT("nlp", nlp_per_pe, "number of LPs per processor"),
      // TWOPT_STIME("mean", mean, "exponential distribution mean for timestamps"),
      // TWOPT_STIME("mult", mult, "multiplier for event memory allocation"),
      // TWOPT_STIME("lookahead", lookahead, "lookahead for events"),
@@ -56,50 +57,53 @@ const tw_optdef model_opts[] = {
 };
 
 
-void init_mail()
+void displayModelSettings()
 {
-     g_tw_lp_types = model_lps;
-     g_tw_lp_typemap = lpTypeMapper;
+     if(g_tw_mynode ==0)
+     {
+          for (int i = 0; i < 30; i++)
+          {
+               printf("*");
+          }
+          printf("\n");
+          printf("\t nnodes: %i\n", tw_nnodes());
+          printf("\t g_tw_nlp: %llu\n", g_tw_nlp);
+          printf("\t custom_LPs_per_pe: %i\n", custom_LPs_per_pe);
+          for (int i = 0; i < 30; i++)
+          {
+               printf("*");
+          }
+          printf("\n");
 
-     // nlp_per_pe = total_mailboxes + total_post_offices;
+     }
 }
-
-
 
 
 //for doxygen
 #define mail_main main
 int mail_main(int argc, char** argv, char **env)
 {
-     // int i;
-
-     // get rid of error if compiled w/ MEMORY queues
-     // g_tw_memory_nqueues=1;
-     // set a min lookahead of 1.0
-     lookahead = 10.0;
 
      tw_opt_add(model_opts);
      tw_init(&argc, &argv);
 
-     init_mail();
-
-     // if( lookahead > 1.0 )
-     //   tw_error(TW_LOC, "Lookahead > 1.0 .. needs to be less\n");
-
-     // mean = mean - lookahead;
-
-     // g_tw_memory_nqueues = 16; // give at least 16 memory queue event
+     lookahead = 1;
+     nlp_per_pe = 1;
+     custom_LPs_per_pe = 1;
 
 
-     // offset_lpid = g_tw_mynode * nlp_per_pe;
-     // ttl_lps = tw_nnodes() * g_tw_npe * nlp_per_pe;
-     // g_tw_events_per_pe = (mult * nlp_per_pe * g_phold_start_events) +
-     // 			optimistic_memory;
-     // //g_tw_rng_default = TW_FALSE;
+     g_tw_nlp = (total_mailboxes + total_post_offices);
      g_tw_lookahead = lookahead;
+     custom_LPs_per_pe = (g_tw_nlp / g_tw_npe)/tw_nnodes();
 
-     //set up LPs within ROSS
-     tw_define_lps(nlp_per_pe, sizeof(letter));
+
+     displayModelSettings();
+
+     g_tw_lp_types = model_lps;
+     g_tw_lp_typemap = lpTypeMapper;
+
+
+     tw_define_lps(custom_LPs_per_pe, sizeof(letter));
 
      tw_lp_setup_types();
 
