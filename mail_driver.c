@@ -31,7 +31,8 @@ void mailbox_init (mailbox_state *s, tw_lp *lp)
      {
           // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
           // tw_stime ts = 1;
-          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+          // tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + 1;
           tw_event *e = tw_event_new(self,ts,lp);
           letter *let = tw_event_data(e);
           let->sender = self;
@@ -46,7 +47,7 @@ void mailbox_prerun(mailbox_state *s, tw_lp *lp)
 
      tw_lpid assigned_post_office = get_assigned_post_office_LID(lp->gid);
 
-     printf("%d: I am a mailbox assigned to PO %llu\n",self,assigned_post_office);
+     // printf("%d: I am a mailbox assigned to PO %llu\n",self,assigned_post_office);
 }
 
 
@@ -73,7 +74,8 @@ void mailbox_event_handler(mailbox_state *s, tw_bf *bf, letter *in_msg, tw_lp *l
      // tw_event *e = tw_event_new(self,tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT),lp);
      // tw_stime ts = 1;
      // tw_stime ts = tw_rand_exponential(lp->rng, mean) + lookahead + (tw_stime)(lp->gid % (unsigned int)g_tw_ts_end);
-     tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+     // tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+     tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + 1;
      tw_event *e = tw_event_new(next_dest,ts,lp);
      letter *let = tw_event_data(e);
      let->sender = self;
@@ -114,7 +116,7 @@ void post_office_init (post_office_state *s, tw_lp *lp)
 void post_office_prerun (post_office_state *s, tw_lp *lp)
 {
      int self = lp->gid;
-     printf("%d: I am a post office\n",self);
+     // printf("%d: I am a post office\n",self);
 }
 
 
@@ -134,7 +136,8 @@ void post_office_event_handler(post_office_state *s, tw_bf *bf, letter *in_msg, 
           final_dest = in_msg -> final_dest;
           next_dest = in_msg -> final_dest;
 
-          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+          // tw_stime ts = tw_rand_exponential(lp->rng, MEAN_PO_PROCESS_WAIT) + lookahead;
+          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_PO_PROCESS_WAIT) + 5;
           tw_event *e = tw_event_new(next_dest,ts,lp);
           letter *let = tw_event_data(e);
           let->sender = self;
@@ -149,7 +152,8 @@ void post_office_event_handler(post_office_state *s, tw_bf *bf, letter *in_msg, 
           final_dest = in_msg -> final_dest;
           next_dest = assigned_post_office_gid;
 
-          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_MAILBOX_WAIT) + lookahead;
+          // tw_stime ts = tw_rand_exponential(lp->rng, MEAN_PO_PROCESS_WAIT) + lookahead;
+          tw_stime ts = tw_rand_exponential(lp->rng, MEAN_PO_PROCESS_WAIT) + 5;
           tw_event *e = tw_event_new(next_dest,ts,lp);
           letter *let = tw_event_data(e);
           let->sender = self;

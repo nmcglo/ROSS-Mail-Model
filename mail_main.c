@@ -9,7 +9,7 @@ Neil McGlohon
 #include "mail.h"
 
 
-// Define LP types
+// Define LP types for Mailbox and Post Office
 tw_lptype model_lps[] =
 {
      {
@@ -40,23 +40,16 @@ tw_lptype model_lps[] =
 int total_mailboxes= 0;
 int total_post_offices = 0;
 
-//add your command line opts
+//Command line opts
 const tw_optdef model_opts[] = {
      TWOPT_GROUP("Mail Model"),
      TWOPT_UINT("mailboxes", total_mailboxes, "Number of mailboxes in simulation"),
      TWOPT_UINT("postoffices", total_post_offices, "Number of post offices in simulation"),
-     // TWOPT_UINT("nlp", nlp_per_pe, "number of LPs per processor"),
-     // TWOPT_STIME("mean", mean, "exponential distribution mean for timestamps"),
-     // TWOPT_STIME("mult", mult, "multiplier for event memory allocation"),
-     // TWOPT_STIME("lookahead", lookahead, "lookahead for events"),
-     // TWOPT_UINT("start-events", g_phold_start_events, "number of initial messages per LP"),
-     // TWOPT_UINT("stagger", stagger, "Set to 1 to stagger event uniformly across 0 to end time."),
-     // TWOPT_UINT("memory", optimistic_memory, "additional memory buffers"),
-     // TWOPT_CHAR("run", run_id, "user supplied run name"),
      TWOPT_END()
 };
 
 
+//Displays simple settings of the simulation
 void displayModelSettings()
 {
      if(g_tw_mynode ==0)
@@ -66,9 +59,30 @@ void displayModelSettings()
                printf("*");
           }
           printf("\n");
+          printf("Mail Model Configuration:\n");
           printf("\t nnodes: %i\n", tw_nnodes());
           printf("\t g_tw_nlp: %llu\n", g_tw_nlp);
-          printf("\t custom_LPs_per_pe: %i\n", custom_LPs_per_pe);
+          printf("\t custom_LPs_per_pe: %i\n\n", custom_LPs_per_pe);
+
+          printf("\t total_mailboxes: %i\n", total_mailboxes);
+          printf("\t total_post_offices: %i\n\n", total_post_offices);
+
+          printf("\tGID:\n");
+          for(int i = 0; i < total_mailboxes; i++)
+          {
+               tw_lpid assigned_post_office = get_assigned_post_office_LID(i);
+
+               printf("\t%i:   Mailbox assigned to PO %llu\n",i,assigned_post_office);
+          }
+
+          for(int i = 0; i < total_post_offices; i++)
+          {
+               int gid = i + total_mailboxes;
+               printf("\t%i:   Post Office %i\n",gid,i);
+          }
+
+
+
           for (int i = 0; i < 30; i++)
           {
                printf("*");
@@ -87,13 +101,12 @@ int mail_main(int argc, char** argv, char **env)
      tw_opt_add(model_opts);
      tw_init(&argc, &argv);
 
-     lookahead = 1;
      nlp_per_pe = 1;
      custom_LPs_per_pe = 1;
 
 
      g_tw_nlp = (total_mailboxes + total_post_offices);
-     g_tw_lookahead = lookahead;
+     g_tw_lookahead = 1;
      custom_LPs_per_pe = (g_tw_nlp / g_tw_npe)/tw_nnodes();
 
 
