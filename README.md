@@ -1,14 +1,12 @@
-# Usage
+#Introduction
 
-If you are creating your own model feel free to fork this repository.
-As you develop, please replace "model" with appropriately descriptive names for your variables, files, and functions.
+This is an example model for use with [ROSS](http://github.com/carothersc/ROSS), the parallel discrete event simulation system at Rensselaer Polytechnic Institute.
+
+This model simulates a simple postal network of mailboxes and post offices. Mailboxes send letters which are delivered to specific assigned post offices. The post offices process letters, determining if each letter that they recieve can be delivered to a local mailbox or if it must be routed to another post office.
+
+This example model shows simple usage of scheduling new events, altering and reading message states, mapping of multiple LPs in a PDES system, and other intricacies of ROSS model development.
+
 
 # Installation
 
-This repository is automatically linked with [ROSS](http://github.com/carothersc/ROSS) and can be downloaded using the following commands:
-```
-git clone http://github.com/carothersc/ROSS.git
-cd ROSS
-git submodule init
-git submodule update
-```
+This model requires the installation of [ROSS](http://github.com/carothersc/ROSS). After cloning this repository, follow the installation instructions in the ROSS repository to install.
