@@ -107,14 +107,13 @@ int mail_main(int argc, char** argv, char **env)
 
      g_tw_nlp = (total_mailboxes + total_post_offices);
      g_tw_lookahead = 1;
-     custom_LPs_per_pe = (g_tw_nlp / g_tw_npe)/tw_nnodes();
+     custom_LPs_per_pe = (g_tw_nlp)/tw_nnodes();
 
 
      displayModelSettings();
 
      g_tw_lp_types = model_lps;
      g_tw_lp_typemap = lpTypeMapper;
-
 
      tw_define_lps(custom_LPs_per_pe, sizeof(letter));
 

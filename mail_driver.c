@@ -21,10 +21,12 @@ Neil McGlohon
 
 void mailbox_init (mailbox_state *s, tw_lp *lp)
 {
+     // tw_stime core_rng = tw_rand_unif(&lp->rng[g_tw_nRNG_per_lp-1]);
+     // printf("%d: init core rng = %.5f\n", lp->gid, core_rng);
      int self = lp->gid;
 
      // init state data
-     s->num_letters_recvd = -1;
+     s->num_letters_recvd = 0;
 
      int i;
      for(i = 0; i < LET_PER_MAILBOX; i++)
@@ -97,6 +99,11 @@ void mailbox_final(mailbox_state *s, tw_lp *lp)
 {
      int self = lp->gid;
      printf("Mailbox %d: S:%d R:%d messages\n", self, s->num_letters_sent, s->num_letters_recvd);
+
+     // printf("rng count %d\n",lp->core_rng->count);
+     // tw_rand_reverse_unif(&lp->rng[g_tw_nRNG_per_lp-1]);
+     // tw_stime core_rng = tw_rand_unif(&lp->rng[g_tw_nRNG_per_lp-1]);
+     // printf("%d: final core rng = %.5f\n", lp->gid, core_rng);
 }
 
 // void mailbox_commit(state * s, tw_bf * bf, letter * m, tw_lp * lp)
@@ -106,7 +113,7 @@ void mailbox_final(mailbox_state *s, tw_lp *lp)
 //-------------Post office stuff-------------
 
 void post_office_init (post_office_state *s, tw_lp *lp)
-{
+{    
      int self = lp->gid;
 
      // init state data
@@ -144,8 +151,6 @@ void post_office_event_handler(post_office_state *s, tw_bf *bf, letter *in_msg, 
           let->final_dest = final_dest;
           let->next_dest = next_dest;
           tw_event_send(e);
-          s->num_letters_sent++;
-
      }
      else //You need to route it to another post offifce
      {
@@ -160,14 +165,15 @@ void post_office_event_handler(post_office_state *s, tw_bf *bf, letter *in_msg, 
           let->final_dest = final_dest;
           let->next_dest = next_dest;
           tw_event_send(e);
-          s->num_letters_sent++;
      }
+     s->num_letters_sent++;
 
 
 }
 
 void post_office_RC_event_handler(post_office_state *s, tw_bf *bf, letter *in_msg, tw_lp *lp)
 {
+     s->num_letters_sent--;
      tw_rand_reverse_unif(lp->rng);
      s->num_letters_recvd--;
 }
